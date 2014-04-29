@@ -1,6 +1,6 @@
 /* Atomic Autobiography App: by Artun Kircali, 4/29/14
  * ---------------------------------------------------
- * Form 1:
+ * Page1 Class:
  * Calls saving, loading, and submission functions at
  *   specfic times (only when Save, Load, Submit are pressed).
  * Specifies how to navigate form's 11 panels using 'Next',
