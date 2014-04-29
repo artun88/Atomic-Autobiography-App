@@ -726,7 +726,8 @@ namespace Atomic_Object_Job_Application
         public TransparentLabel()
         {
             //By turning on opaque, the background of the label won't be
-            //  painted so it can display whatever image it is painted
+            //  painted so it can use the below parameter override to 
+            //  transparency to display whatever image it is painted
             //  directly on top of, since the double buffer is off.
             this.SetStyle(ControlStyles.Opaque, true);
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
