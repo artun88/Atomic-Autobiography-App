@@ -1,3 +1,14 @@
+/* Atomic Autobiography App: by Artun Kircali, 4/29/14
+ * ---------------------------------------------------
+ * Form 1:
+ * Calls saving, loading, and submission functions at
+ *   specfic times (only when Save, Load, Submit are pressed).
+ * Specifies how to navigate form's 11 panels using 'Next',
+ *   'Previous', 'Exit', 'Cancel', and 'Load' buttons.
+ * Receives user input from controls located on form.
+ * Checks for valid user input before any save is performed.
+ */
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +26,7 @@ namespace Atomic_Object_Job_Application
     public partial class page1 : Form
     {
         Applicant ap = new Applicant();
-        bool firstClick = true;
+        bool firstClick = true; //Track entry to form after pg1_bNext clicked
         
         public void initDirectories()
         {
@@ -38,7 +49,8 @@ namespace Atomic_Object_Job_Application
         }
 
         //Prepares format of autobiography text document
-        public void initAppQs()
+        //  & prepares proper default responses
+        public void initAppQsAs()
         {
             ap.AppQuestions = new string[23]{"Name: ", 
                 pg2_Lbl_Twitter.Text + ": ", pg2_Lbl_LinkedIn.Text + ": ",
@@ -54,16 +66,20 @@ namespace Atomic_Object_Job_Application
                 "8) " + pg8_TL_Q17.Text, "9) " + pg8_TL_Q18.Text, 
                 "10) " + pg9_TL_Q19.Text, "11) " + pg9_TL_Q20.Text, 
                 "12) " + pg10_TL_Q21.Text};
+
+            //Enters radio button's default setting as user input
+            ap.addResponse(7, pg3_NoBox.Text);
         }
         
         //Checks if user entered a valid e-mail address
-        //and prepares file name specific to applicant
-        //string val: specifies if form is saving or submitting
+        //  & prepares file name specific to applicant.
+        //string val: Specifies if form is being saved or submitted
+        //  when providing an error message.
         public bool checkValidInput(string val)
         {
             string email = pg2_EMailQ.Text;
-            string first = pg2_FirstNameQ1.Text;
-            string last = pg2_LastNameQ1.Text;
+            string first = pg2_FirstNameQ1.Text.Trim();
+            string last = pg2_LastNameQ1.Text.Trim();
 
             if(string.IsNullOrWhiteSpace(first) |
                string.IsNullOrWhiteSpace(last))
@@ -111,8 +127,7 @@ namespace Atomic_Object_Job_Application
             }
 
             //Checks 'E-Mail' for valid input
-            char[] sep = {'@'};
-            string[] emailParts = email.Split(sep, 2);
+            string[] emailParts = email.Split(new char[] {'@'}, 2);
 
             if(string.IsNullOrWhiteSpace(emailParts.First()) |
                 string.IsNullOrWhiteSpace(emailParts.Last()) |
@@ -210,17 +225,17 @@ namespace Atomic_Object_Job_Application
             }
         }
 
-        //Begin user navigation of form
+        //**********Begin detection of user's form navigation**********//
         private void pg1_bNext_Click(object sender, EventArgs e)
         {
             page2.Visible = true;
             atomicLogo.Parent = page2;
 
-            //Prevents repeated initialization of form questions
+            //Initializes question array once & only once form is entered
             if (firstClick)
             {
                 firstClick = false;
-                initAppQs();
+                initAppQsAs();
             }
         }
                
@@ -341,9 +356,10 @@ namespace Atomic_Object_Job_Application
             atomicLogo.Parent = page9;
             page10.Visible = false;
         }
-        //End user navigation of form
+        //**********End detection of user's form navigation**********//
 
-        //'Submits' and saves form
+        //Submit button: 'Submits' form to local C:\ directory
+        //specified by value of applicant's pathDir
         private void pg10_bSubmit_Click(object sender, EventArgs e)
         {
             if (checkValidInput("submit"))
@@ -377,6 +393,7 @@ namespace Atomic_Object_Job_Application
             }
         }
         
+        //Removes '@' and all '.'s to prep for file name
         public void formatUserID(string email)
         {
             string[] emailParts = email.Split('@');
@@ -385,15 +402,16 @@ namespace Atomic_Object_Job_Application
             ap.UserID = first + last;
         }
 
-        //Load data file
+        //Loads user's previously saved responses from local file
         private void pgLoad_Login_Click(object sender, EventArgs e)
         {
-            formatUserID(pgLoad_EMailQ.Text);
+            formatUserID(pgLoad_EMailQ.Text.Trim());
             
             if (ap.loadFormData())
             {
                 //Now the answers array should be initialized
-                //This section loads answers into respective text boxes
+                //This section reloads data into the form
+                //  by loading answers into their respective text boxes
                 string[] tempName = ap.Answers[0].Split(' ');
                 pg2_FirstNameQ1.Text = tempName.First();
                 pg2_LastNameQ1.Text = tempName.Last();
@@ -430,10 +448,11 @@ namespace Atomic_Object_Job_Application
                 atomicLogo.Parent = page2;
                 loadPage.Visible = false;
 
+                //Ensures question array is intialized once & only once
                 if (firstClick)
                 {
                     firstClick = false;
-                    initAppQs();
+                    initAppQsAs();
                 }
 
                 ap.saveFormData();
@@ -441,7 +460,7 @@ namespace Atomic_Object_Job_Application
             }
         }
 
-        //Cancel: Goes back to page 1 if user cancels Load page
+        //Cancel button: Goes back to page 1 if user cancels Load page
         private void pgLoad_bCancel_Click(object sender, EventArgs e)
         {
             pgLoad_EMailQ.Clear();
@@ -494,7 +513,7 @@ namespace Atomic_Object_Job_Application
             ap.PropChange = true;
         }
 
-        //Begin recording user responses
+        //**************Begin recording user responses**************//
         private void pg2_FirstNameQ1_TextChanged(object sender, EventArgs e)
         {
             ap.addResponse(0, pg2_FirstNameQ1.Text.Trim() + " " +
@@ -511,8 +530,8 @@ namespace Atomic_Object_Job_Application
 
         private void pg2_EMailQ_TextChanged(object sender, EventArgs e)
         {
-            formatUserID(pg2_EMailQ.Text);
-            ap.addResponse(23, pg2_EMailQ.Text);
+            formatUserID(pg2_EMailQ.Text.Trim());
+            ap.addResponse(23, pg2_EMailQ.Text.Trim());
             ap.PropChange = true;
         }
 
@@ -641,7 +660,7 @@ namespace Atomic_Object_Job_Application
             ap.addResponse(22, pg10_AnswerQ21.Text.Trim());
             ap.PropChange = true;
         }
-        //End recording user responses
+        //**************End recording user responses**************//
 
         //Ensures page consistency after maximizing or minimizing window
         private void page1_Resize(object sender, EventArgs e)
