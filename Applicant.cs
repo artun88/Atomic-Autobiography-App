@@ -1,3 +1,13 @@
+/*Artun Kircali - 4/29/14
+* Applicant class:
+* Contains information relating to the user entering responses into
+*   the form's text boxes.
+* Properties should include: user ID, save/load/submit file directory
+*   location, array of strings to hold info of form questions written
+*   on windows form labels, array of strings to hold user input received 
+*   from rich text boxes, and a value of bool type that detects if the
+*   user had made a change has been made to the form.
+*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
