@@ -1,6 +1,6 @@
 /* Atomic Autobiography App: by Artun Kircali, 4/29/14
  * ---------------------------------------------------
- * Form 1:
+ * Form1 Class:
  * Calls saving, loading, and submission functions at
  *   specfic times (only when Save, Load, Submit are pressed).
  * Specifies how to navigate form's 11 panels using 'Next',
@@ -72,9 +72,9 @@ namespace Atomic_Object_Job_Application
         }
         
         //Checks if user entered a valid e-mail address
-        //  & prepares file name specific to applicant.
+        //  & prepares file name specific to applicant
         //string val: Specifies if form is being saved or submitted
-        //  when providing an error message.
+        //  when providing an error message
         public bool checkValidInput(string val)
         {
             string email = pg2_EMailQ.Text;
@@ -196,7 +196,7 @@ namespace Atomic_Object_Job_Application
             }
         }
         
-        //Warns user before closing form when hitting 'x' button
+        //'X' Button: Warns user before closing form
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
@@ -358,8 +358,8 @@ namespace Atomic_Object_Job_Application
         }
         //**********End detection of user's form navigation**********//
 
-        //Submit button: 'Submits' form to local C:\ directory
-        //specified by value of applicant's pathDir
+        //Submit button: 'Submits' form to local C:\
+        //  directoryspecified by value of applicant's pathDir
         private void pg10_bSubmit_Click(object sender, EventArgs e)
         {
             if (checkValidInput("submit"))
@@ -415,7 +415,6 @@ namespace Atomic_Object_Job_Application
                 string[] tempName = ap.Answers[0].Split(' ');
                 pg2_FirstNameQ1.Text = tempName.First();
                 pg2_LastNameQ1.Text = tempName.Last();
-                
                 pg2_EMailQ.Text = ap.Answers[23];
                 pg2_TwitterQ2.Text = ap.Answers[1];
                 pg2_LinkedInQ3.Text = ap.Answers[2];
