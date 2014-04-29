@@ -2,12 +2,12 @@
  * ---------------------------------------------------
  * Applicant Class:
  * Contains information relating to the user entering responses into
- *   the form's text boxes.
+ *   the form's text boxes
  * Properties should include: user ID, save/load/submit file directory
  *   location, array of strings to hold info of form questions written
  *   on windows form labels, array of strings to hold user input received 
  *   from rich text boxes, and a value of bool type that detects if the
- *   user had made a change has been made to the form.
+ *   user had made a change has been made to the form
  */
 
 using System;
@@ -85,16 +85,16 @@ namespace Atomic_Object_Job_Application
             }
         }
 
-        //Records & keeps track of user's responses.
+        //Records & keeps track of user's responses
         public void addResponse(int i, string str)
         {
             answers[i] = str;
         }
 
         //Removes all instances of new lines so that
-        //  answers[] can be properly refilled during loadFormData().
+        //  answers[] can be properly refilled during loadFormData()
         //If new lines aren't removed, responses can't be saved
-        //  to correct indices of answers[].
+        //  to correct indices of answers[]
         public void removeNewLines(ref string[] answers)
         {
             for (int i = 0; i < answers.Length; i++)
@@ -105,7 +105,7 @@ namespace Atomic_Object_Job_Application
         }
 
         //Removes extraneous whitespace between words in user's
-        //  responses to maintain neat consistent formatting in submission.
+        //  responses to maintain neat consistent formatting in submission
         public string trimSpaceBtwStrings(string str)
         {
             string[] words = str.Split(new string[] {" "},
@@ -113,7 +113,7 @@ namespace Atomic_Object_Job_Application
             string trimmedStr = null;
             
             //Cycle through entire resposne, adding each word to
-            //  a new string with only one space between each word.
+            //  a new string with only one space between each word
             for(int i = 0; i < words.Length; i++)
             {
                 string result = words[i].Trim();
@@ -148,10 +148,9 @@ namespace Atomic_Object_Job_Application
             return first;
         }
 
-        //Fills out autobiography document.
+        //Fills out autobiography document
         //During submission, responses from answers[] are added to
-        //  set questions in appQs[] so they can be written to file.
-        //Basically returns appQs[] + answers[].
+        //  set questions in appQs[] so they can be written to file
         private string[] mergeQsAs()
         {
             string[] filledApp = new string[appQs.Length];
@@ -183,9 +182,9 @@ namespace Atomic_Object_Job_Application
         }
 
         //Saves user's current responses to a read-only 
-        //  file in hidden folder.
-        //Returns false: If set directory is missing or incorrect.
-        //Returns true: If file is opened and written successfully.
+        //  file in hidden folder
+        //Returns false: If set directory is missing or incorrect
+        //Returns true: If file is opened and written successfully
         public bool saveFormData()
         {
             propChange = false;
@@ -268,12 +267,11 @@ namespace Atomic_Object_Job_Application
                     {
                         answers[i] = trimSpaceBtwStrings(answers[i]);
                         answers[i] = putInParagraphs(answers[i]);
-                        answers[i].TrimEnd();
+                        answers[i] = answers[i].Trim();
                     }
                 }
             }
-            //answers[] has gone out of bounds during formatting process
-            catch
+            catch   //answers[] went out of bounds during formatting process
             {
                 MessageBox.Show("Sorry, there was an issue submitting " +
                     "your autobiography.", "Error", MessageBoxButtons.OK,
@@ -284,10 +282,9 @@ namespace Atomic_Object_Job_Application
             string[] filledApp = mergeQsAs(); //Fills out form
             
             //Name's file using user's name and e-mail 
-            string[] appName = answers[0].Split(new string[] {" "},
-                StringSplitOptions.None);
-            string pathFile = pathDir + @"Submits\" + appName.First() +
-                "_" + appName.Last() + "_" + userID + ".txt";
+            string appName = answers[0].Replace(' ', '_');
+            string pathFile = pathDir + @"Submits\" +
+                appName + "_" + userID + ".txt";
                  
             //Checks if user already submitted using this e-mail address
             if (File.Exists(pathFile))
@@ -302,7 +299,7 @@ namespace Atomic_Object_Job_Application
                 File.WriteAllLines(pathFile, filledApp);
                 File.SetAttributes(pathFile, FileAttributes.ReadOnly);
             }
-            catch
+            catch   //File could not be written
             {
                 MessageBox.Show("There was an error submitting the file.", 
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
