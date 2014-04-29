@@ -1,5 +1,6 @@
 /* Atomic Autobiography App: by Artun Kircali, 4/29/14
  * ---------------------------------------------------
+ * Program Class:
  * Contains Main()
  * Runs my application.
  */
