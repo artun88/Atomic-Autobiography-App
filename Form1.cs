@@ -1,6 +1,6 @@
 /* Atomic Autobiography App: by Artun Kircali, 4/29/14
  * ---------------------------------------------------
- * Page1 Class:
+ * Form 1:
  * Calls saving, loading, and submission functions at
  *   specfic times (only when Save, Load, Submit are pressed).
  * Specifies how to navigate form's 11 panels using 'Next',
@@ -725,11 +725,15 @@ namespace Atomic_Object_Job_Application
     {
         public TransparentLabel()
         {
+            //By turning on opaque, the background of the label won't be
+            //  painted so it can display whatever image it is painted
+            //  directly on top of, since the double buffer is off.
             this.SetStyle(ControlStyles.Opaque, true);
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
-            //draws underlying object as background
         }
 
+        //Manually overrides label parameters
+        //  to make its background transparent
         protected override CreateParams CreateParams
         {
             get
